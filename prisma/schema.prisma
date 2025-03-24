@@ -1,0 +1,123 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum role_user {
+  admmin
+  customer
+}
+
+enum status_order {
+  belum_digunakan
+  digunakan
+  expired
+}
+
+enum status_pembayaran {
+  pending
+  gagal
+  berhasil
+}
+
+model User {
+  id Int @id @default(autoincrement()) 
+  nama String @db.Text
+  username String @db.Text
+  email String @db.Text
+  password String @db.Text
+  status Int 
+  role role_user @default(customer)
+
+  auth Auth[]
+  pemesanan Pemesanan[]
+
+  @@map("users")
+}
+
+model Auth {
+  id Int @id @default(autoincrement())
+  user_id Int 
+  token String? @db.Text
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("auth")
+}
+
+model Kategori {
+  id Int @id @default(autoincrement())
+  nama_kategori String  @db.Text 
+
+  acara Acara[]
+
+  @@map("kategori")
+}
+
+model Acara {
+  id Int @id @default(autoincrement())
+  nama_acara String @db.Text
+  waktu_acara DateTime @db.Timestamptz(3)
+  kategori_id Int?
+  deskripsi String @db.Text
+  banner_img String @db.Text
+  map_tiket_img String? @db.Text
+
+  kategori Kategori? @relation(fields: [kategori_id], references: [id], onDelete: SetNull)
+  tiket_acara Tiket_Acara[]
+
+  @@map("acara")
+}
+
+model Tiket_Acara {
+  id Int @id @default(autoincrement())
+  acara_id Int
+  tipe_tiket String @db.Text
+  kuota Int
+  tiket_terjual Int
+  harga_tiket Int
+  
+  acara Acara @relation(fields: [acara_id], references: [id], onDelete: Cascade)
+  orders Order[]
+
+  @@map("tiket_acara")
+}
+
+
+model Pemesanan {
+  id Int @id @default(autoincrement())
+  user_id Int
+  kode_pemesanan String @db.Text
+  status_pembayaran status_pembayaran @default(pending)
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  orders Order[]
+
+  @@map("pemesanan")
+}
+
+model Order {
+  id Int @id @default(autoincrement())
+  pemesanan_id Int
+  tiket_acara_id Int
+  kode_order String @db.Text
+  status status_order @default(belum_digunakan)
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+
+  tiket_acara Tiket_Acara? @relation(fields: [tiket_acara_id], references: [id], onDelete: Cascade)
+  pemesanan Pemesanan @relation(fields: [pemesanan_id], references: [id], onDelete: Cascade )
+
+  @@map("orders")
+}
+
