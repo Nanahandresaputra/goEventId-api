@@ -1,0 +1,2 @@
+npx @nestjs/cli generate middleware
+npx @nestjs/cli generate resource user
