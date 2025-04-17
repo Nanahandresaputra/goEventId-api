@@ -1,24 +1,27 @@
 import { Injectable } from '@nestjs/common';
-import { RegisterDto } from './dto/create-auth.dto';
 import { LoginDto } from './dto/update-auth.dto';
 import { PrismaService } from 'src/db/prisma.service';
 import { encryptPwd } from 'src/helpers/bcrypt';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
   constructor(private prisma: PrismaService) {}
-  create(registerDto: RegisterDto) {
-    return 'This action adds a new auth';
+  async create(registerData: Prisma.UserCreateInput) {
+    // return 'This action adds a new auth';
 
-    // try {
-    //   const hashPassword: string = encryptPwd(registerDto.password);
+    try {
+      const hashPassword: string = encryptPwd(registerData.password);
 
-    //   const sendValue: RegisterDto = { ...registerDto, password: hashPassword };
+      const sendValue: Prisma.UserCreateInput = {
+        ...registerData,
+        password: hashPassword,
+      };
 
-    //   await this.prisma.user.create({ data: sendValue });
-    // } catch (error) {
-    //   console.log(error);
-    // }
+      await this.prisma.user.create({ data: sendValue });
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   update(LoginDto: LoginDto) {
