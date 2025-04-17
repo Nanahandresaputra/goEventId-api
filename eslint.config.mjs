@@ -34,6 +34,7 @@ export default tseslint.config(
         'error',
         {
           endOfLine: 'auto',
+          '@typescript-eslint/no-unsafe-call': 'error',
         },
       ],
     },
