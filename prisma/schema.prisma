@@ -16,6 +16,7 @@ datasource db {
 enum role_user {
   admmin
   customer
+  superAdmin
 }
 
 enum status_order {
@@ -33,7 +34,7 @@ enum status_pembayaran {
 model User {
   id Int @id @default(autoincrement()) 
   nama String @db.Text
-  username String @db.Text
+  username String @db.Text @unique
   email String @db.Text
   password String @db.Text
   status Int 

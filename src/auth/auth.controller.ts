@@ -1,6 +1,5 @@
-import { Controller, Post, Body, Patch } from '@nestjs/common';
+import { Controller, Post, Body, Patch, Delete, Headers } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LoginDto } from './dto/update-auth.dto';
 import { role_user } from '@prisma/client';
 
 @Controller('auth')
@@ -15,15 +14,22 @@ export class AuthController {
       username: string;
       email: string;
       password: string;
-      status: number;
-      role: role_user;
     },
   ) {
-    return this.authService.create(registerData);
+    return this.authService.register({
+      ...registerData,
+      role: role_user.customer,
+      status: 1,
+    });
   }
 
-  @Patch()
-  login(@Body() loginDto: LoginDto) {
-    return this.authService.update(loginDto);
+  @Post('login')
+  login(@Body() loginData: { username: string; password: string }) {
+    return this.authService.login(loginData);
+  }
+
+  @Delete('logout')
+  logout(@Headers() headers: { token: string }) {
+    return this.authService.logout(headers);
   }
 }

@@ -1,1 +1,2 @@
 DATABASE_URL= "databaseType://YourUserName:YourPassword@YourHostname:port/YourDatabaseName";
+SECRET_KEY
