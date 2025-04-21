@@ -1,6 +1,5 @@
 import {
   BadRequestException,
-  HttpCode,
   Injectable,
   InternalServerErrorException,
   UnauthorizedException,
@@ -78,6 +77,7 @@ export class AuthService {
         ).getResponse();
       }
     } catch (error) {
+      console.log({ error });
       if (error.name === 'PrismaClientValidationError') {
         return new BadRequestException().getResponse();
       } else {
@@ -94,10 +94,13 @@ export class AuthService {
 
       return this.successResp.response({ message: 'logout successfully!' });
     } catch (error) {
-      console.log({ error, logoutData });
-      console.log('test iom');
-
-      return new InternalServerErrorException().getResponse();
+      if (error.name === 'PrismaClientValidationError') {
+        return new BadRequestException().getResponse();
+      } else {
+        return new InternalServerErrorException(
+          'Internal Server Error',
+        ).getResponse();
+      }
     }
   }
 }
