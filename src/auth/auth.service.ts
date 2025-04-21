@@ -29,9 +29,7 @@ export class AuthService {
 
       await this.prisma.user.create({ data: sendValue });
 
-      return this.successResp.response({
-        message: 'user register succesfully!',
-      });
+      return this.successResp.response();
     } catch (error) {
       if (error.name === 'PrismaClientValidationError') {
         return new BadRequestException().getResponse();
@@ -68,7 +66,6 @@ export class AuthService {
         });
 
         return this.successResp.response({
-          message: 'loggin successfully!',
           token: createAuth.token,
         });
       } else {
@@ -92,7 +89,7 @@ export class AuthService {
     try {
       await this.prisma.auth.deleteMany({ where: { token: logoutData.token } });
 
-      return this.successResp.response({ message: 'logout successfully!' });
+      return this.successResp.response();
     } catch (error) {
       if (error.name === 'PrismaClientValidationError') {
         return new BadRequestException().getResponse();

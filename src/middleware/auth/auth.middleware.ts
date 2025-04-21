@@ -18,38 +18,42 @@ export class AuthMiddleware implements NestMiddleware {
     private utils: UtilsService,
   ) {}
   async use(req: Request, res: Response, next: () => void) {
-    const token = req.headers['token'];
+    const token: string = req.headers['token'];
 
     if (!token) {
       throw new UnauthorizedException('Authorization token is missing');
     } else {
       try {
-        let authValue = await this.prisma.auth.findFirst({ where: { token } });
+        const authValue = await this.prisma.auth.findFirst({
+          where: { token },
+        });
 
         if (!authValue?.token) {
           throw new UnauthorizedException();
         } else {
-          const Uri = req.url.replace('/goEventId/api/v1/', '');
           const fullUri = req.url;
 
-          const superAdminRoute = ['user'].map((path) => `${Uri}/${path}`);
+          const superAdminRoute = ['users'].map(
+            (path) => `/goEventId/api/v1/${path}`,
+          );
 
           if (this.utils.decodeToken(token)?.role === role_user.superAdmin) {
             if (superAdminRoute.includes(fullUri)) {
-              console.log('trieggerer');
-              next();
+              return next();
             } else {
               throw new ForbiddenException();
             }
+          } else {
+            throw new ForbiddenException();
           }
         }
 
-        return next();
+        // return next();
       } catch (error) {
-        console.log(error.name);
-
         if (error.name === 'UnauthorizedException') {
           throw new UnauthorizedException();
+        } else if (error.name === 'ForbiddenException') {
+          throw new ForbiddenException();
         } else {
           throw new BadRequestException();
         }
