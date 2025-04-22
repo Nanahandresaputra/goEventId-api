@@ -16,6 +16,7 @@ import { role_user } from '@prisma/client';
 import { AbilityFactory } from 'nest-casl/dist/factories/ability.factory';
 import { UtilsService } from './helpers/utils/utils.service';
 import { UtilsModule } from './helpers/utils/utils.module';
+import { KategoriModule } from './kategori/kategori.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { UtilsModule } from './helpers/utils/utils.module';
     //   abilityFactory: AbilityFactory,
     // }),
     UtilsModule,
+    KategoriModule,
   ],
   controllers: [],
   providers: [],

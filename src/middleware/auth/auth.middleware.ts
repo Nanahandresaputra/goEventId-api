@@ -21,7 +21,7 @@ export class AuthMiddleware implements NestMiddleware {
     const token: string = req.headers['token'];
 
     if (!token) {
-      throw new UnauthorizedException('Authorization token is missing');
+      throw new UnauthorizedException();
     } else {
       try {
         const authValue = await this.prisma.auth.findFirst({
@@ -33,9 +33,13 @@ export class AuthMiddleware implements NestMiddleware {
         } else {
           const fullUri = req.url;
 
-          const superAdminRoute = ['users'].map(
-            (path) => `/goEventId/api/v1/${path}`,
-          );
+          const superAdminRoute = ['user'].map((path) => {
+            const extraPath = fullUri.split('/goEventId/api/v1/user')[1];
+
+            return extraPath === ''
+              ? `/goEventId/api/v1/${path}`
+              : `/goEventId/api/v1/${path}${extraPath}`;
+          });
 
           if (this.utils.decodeToken(token)?.role === role_user.superAdmin) {
             if (superAdminRoute.includes(fullUri)) {

@@ -11,7 +11,7 @@ import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { role_user } from '@prisma/client';
 
-@Controller('users')
+@Controller('user')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -33,7 +33,7 @@ export class UsersController {
     });
   }
 
-  @Get()
+  @Get('list')
   findAll() {
     return this.usersService.findAll();
   }
@@ -43,9 +43,19 @@ export class UsersController {
     return this.usersService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
+  @Patch()
+  update(
+    @Body()
+    userData: {
+      id: number;
+      nama: string;
+      username: string;
+      email: string;
+      password: string;
+      role: role_user;
+    },
+  ) {
+    return this.usersService.update(userData);
   }
 
   @Delete(':id')

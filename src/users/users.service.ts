@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/db/prisma.service';
@@ -28,16 +29,12 @@ export class UsersService {
       } else if (error.name === 'PrismaClientKnownRequestError') {
         return new BadRequestException('Username already used!').getResponse();
       } else {
-        return new InternalServerErrorException(
-          'Internal Server Error',
-        ).getResponse();
+        return new InternalServerErrorException().getResponse();
       }
     }
   }
 
   async findAll() {
-    // return `This action returns all users`;
-
     try {
       const listUsers = await this.prisma.user.findMany();
 
@@ -56,12 +53,56 @@ export class UsersService {
     }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: number) {
+    try {
+      const user = await this.prisma.user.findUnique({ where: { id } });
+
+      return this.successResp.response({
+        data: {
+          id: user?.id,
+          nama: user?.nama,
+          username: user?.username,
+          email: user?.email,
+          status: user?.status,
+          role: user?.role,
+        },
+      });
+    } catch (error) {
+      return new InternalServerErrorException().getResponse();
+    }
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(userData: any) {
+    try {
+      const sendData: Prisma.UserUpdateInput = {
+        nama: userData.nama,
+        username: userData.username,
+        email: userData.email,
+        password: userData.password,
+        role: userData.role,
+      };
+
+      const user = await this.prisma.user.findUnique({
+        where: { id: userData.id },
+      });
+
+      if (user?.id) {
+        this.prisma.user.update({ data: sendData, where: { id: userData.id } });
+
+        return this.successResp.response();
+      } else {
+        throw new NotFoundException();
+      }
+    } catch (error) {
+      console.log(error);
+      if (error.name === 'PrismaClientValidationError') {
+        return new BadRequestException().getResponse();
+      } else if (error.name === 'PrismaClientKnownRequestError') {
+        return new BadRequestException('Username already used!').getResponse();
+      } else {
+        return new InternalServerErrorException().getResponse();
+      }
+    }
   }
 
   remove(id: number) {

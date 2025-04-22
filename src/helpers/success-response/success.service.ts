@@ -12,7 +12,7 @@ export class SuccessResponseService {
   response(respData?: RespData) {
     return {
       message: respData?.message ? respData?.message : 'success',
-      ...(respData?.data?.length && { data: respData?.data }),
+      ...(respData?.data && { data: respData?.data }),
       statusCode: HttpStatus.OK,
       ...(respData?.token && { token: respData?.token }),
     };
