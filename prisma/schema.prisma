@@ -14,7 +14,7 @@ datasource db {
 }
 
 enum role_user {
-  admmin
+  admin
   customer
   superAdmin
 }

@@ -1,7 +1,6 @@
-import { role_user } from '@prisma/client';
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsString, IsEmail } from 'class-validator';
 
-export class CreateUserDto {
+export class RegisterDto {
   @IsNotEmpty()
   @IsString()
   nama: string;
@@ -17,7 +16,4 @@ export class CreateUserDto {
   @IsNotEmpty()
   @IsString()
   password: string;
-
-  @IsNotEmpty()
-  role: role_user;
 }

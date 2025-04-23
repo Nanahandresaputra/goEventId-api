@@ -17,6 +17,7 @@ import { AbilityFactory } from 'nest-casl/dist/factories/ability.factory';
 import { UtilsService } from './helpers/utils/utils.service';
 import { UtilsModule } from './helpers/utils/utils.module';
 import { KategoriModule } from './kategori/kategori.module';
+import { ErrorExecptionModule } from './helpers/error-execption/error.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { KategoriModule } from './kategori/kategori.module';
     AuthModule,
     PrismaModule,
     SuccessResponseModule,
+    ErrorExecptionModule,
     JwtModule.register({
       global: true,
       secret: config.secretKey,

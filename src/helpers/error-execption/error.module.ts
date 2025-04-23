@@ -1,10 +1,10 @@
 import { Global, Module } from '@nestjs/common';
-import { SuccessResponseService } from './success.service';
+import { ErrorExecptionService } from './error.service';
 
 @Global()
 @Module({
-  imports: [SuccessResponseService],
+  imports: [ErrorExecptionService],
   // providers: [SuccessResponseService],
   // exports: [SuccessResponseService],
 })
-export class SuccessResponseModule {}
+export class ErrorExecptionModule {}

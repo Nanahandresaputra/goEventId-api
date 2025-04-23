@@ -1,6 +1,8 @@
 import { Controller, Post, Body, Patch, Delete, Headers } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { role_user } from '@prisma/client';
+import { LoginDto } from './dto/login.dto';
+import { RegisterDto } from './dto/register.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -9,22 +11,13 @@ export class AuthController {
   @Post('register')
   register(
     @Body()
-    registerData: {
-      nama: string;
-      username: string;
-      email: string;
-      password: string;
-    },
+    registerData: RegisterDto,
   ) {
-    return this.authService.register({
-      ...registerData,
-      role: role_user.customer,
-      status: 1,
-    });
+    return this.authService.register(registerData);
   }
 
   @Post('login')
-  login(@Body() loginData: { username: string; password: string }) {
+  login(@Body() loginData: LoginDto) {
     return this.authService.login(loginData);
   }
 

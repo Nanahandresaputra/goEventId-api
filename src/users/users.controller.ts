@@ -10,6 +10,7 @@ import {
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { role_user } from '@prisma/client';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Controller('user')
 export class UsersController {
@@ -18,19 +19,9 @@ export class UsersController {
   @Post()
   create(
     @Body()
-    userData: {
-      nama: string;
-      username: string;
-      email: string;
-      password: string;
-      role: role_user;
-    },
+    userData: CreateUserDto,
   ) {
-    return this.usersService.create({
-      ...userData,
-
-      status: 1,
-    });
+    return this.usersService.create(userData);
   }
 
   @Get('list')
@@ -43,19 +34,13 @@ export class UsersController {
     return this.usersService.findOne(+id);
   }
 
-  @Patch()
+  @Patch(':id')
   update(
+    @Param('id') id: string,
     @Body()
-    userData: {
-      id: number;
-      nama: string;
-      username: string;
-      email: string;
-      password: string;
-      role: role_user;
-    },
+    userData: UpdateUserDto,
   ) {
-    return this.usersService.update(userData);
+    return this.usersService.update(+id, userData);
   }
 
   @Delete(':id')

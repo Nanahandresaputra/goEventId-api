@@ -8,22 +8,33 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/db/prisma.service';
 import { SuccessResponseService } from 'src/helpers/success-response/success.service';
 import { Prisma } from '@prisma/client';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UtilsService } from 'src/helpers/utils/utils.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     private prisma: PrismaService,
-    private successResp: SuccessResponseService,
+    private utils: UtilsService,
   ) {}
 
-  async create(userData: Prisma.UserCreateInput) {
+  async create(userData: CreateUserDto) {
     // return 'This action adds a new user';
 
     try {
-      await this.prisma.user.create({ data: userData });
+      const hashPassword: string = this.utils.encryptPwd(userData.password);
 
-      return this.successResp.response();
+      const sendValue: Prisma.UserCreateInput = {
+        ...userData,
+        password: hashPassword,
+        status: 1,
+      };
+
+      await this.prisma.user.create({ data: sendValue });
+
+      return new SuccessResponseService();
     } catch (error) {
+      console.log(error);
       if (error.name === 'PrismaClientValidationError') {
         return new BadRequestException().getResponse();
       } else if (error.name === 'PrismaClientKnownRequestError') {
@@ -38,7 +49,7 @@ export class UsersService {
     try {
       const listUsers = await this.prisma.user.findMany();
 
-      return this.successResp.response({
+      return new SuccessResponseService({
         data: listUsers.map((user) => ({
           id: user.id,
           nama: user.nama,
@@ -57,7 +68,7 @@ export class UsersService {
     try {
       const user = await this.prisma.user.findUnique({ where: { id } });
 
-      return this.successResp.response({
+      return new SuccessResponseService({
         data: {
           id: user?.id,
           nama: user?.nama,
@@ -72,29 +83,25 @@ export class UsersService {
     }
   }
 
-  async update(userData: any) {
+  async update(id: number, userData: UpdateUserDto) {
     try {
-      const sendData: Prisma.UserUpdateInput = {
-        nama: userData.nama,
-        username: userData.username,
-        email: userData.email,
-        password: userData.password,
-        role: userData.role,
-      };
+      // const user = await this.prisma.user.findUnique({
+      //   where: { id },
+      // });
 
-      const user = await this.prisma.user.findUnique({
-        where: { id: userData.id },
-      });
+      // if (user?.id) {
+      //   this.prisma.user.update({ data: userData, where: { id } });
 
-      if (user?.id) {
-        this.prisma.user.update({ data: sendData, where: { id: userData.id } });
+      //   return new SuccessResponseService();
+      // } else {
+      //   throw new NotFoundException();
+      // }
 
-        return this.successResp.response();
-      } else {
-        throw new NotFoundException();
-      }
+      await this.prisma.user.update({ data: userData, where: { id } });
+
+      return new SuccessResponseService();
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
       if (error.name === 'PrismaClientValidationError') {
         return new BadRequestException().getResponse();
       } else if (error.name === 'PrismaClientKnownRequestError') {

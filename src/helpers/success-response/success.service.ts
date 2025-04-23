@@ -7,14 +7,22 @@ interface RespData {
   token?: any;
 }
 
-@Injectable()
+// @Injectable()
 export class SuccessResponseService {
-  response(respData?: RespData) {
+  constructor(private respData?: RespData) {
     return {
-      message: respData?.message ? respData?.message : 'success',
-      ...(respData?.data && { data: respData?.data }),
+      message: this.respData?.message ? this.respData?.message : 'success',
+      ...(this.respData?.data && { data: this.respData?.data }),
       statusCode: HttpStatus.OK,
-      ...(respData?.token && { token: respData?.token }),
+      ...(this.respData?.token && { token: this.respData?.token }),
     };
   }
+  // response(respData?: RespData) {
+  //   return {
+  //     message: this.respData?.message ? this.respData?.message : 'success',
+  //     ...(this.respData?.data && { data: this.respData?.data }),
+  //     statusCode: HttpStatus.OK,
+  //     ...(this.respData?.token && { token: this.respData?.token }),
+  //   };
+  // }
 }
