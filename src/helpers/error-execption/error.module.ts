@@ -3,8 +3,8 @@ import { ErrorExecptionService } from './error.service';
 
 @Global()
 @Module({
-  imports: [ErrorExecptionService],
-  // providers: [SuccessResponseService],
-  // exports: [SuccessResponseService],
+  // imports: [ErrorExecptionService],
+  providers: [ErrorExecptionService],
+  exports: [ErrorExecptionService],
 })
 export class ErrorExecptionModule {}

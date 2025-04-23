@@ -19,6 +19,7 @@ export class AuthService {
   constructor(
     private prisma: PrismaService,
     private jwtService: JwtService,
+    private errorExecption: ErrorExecptionService,
   ) {}
   async register(registerData: RegisterDto) {
     try {
@@ -35,7 +36,7 @@ export class AuthService {
 
       return new SuccessResponseService();
     } catch (error) {
-      return new ErrorExecptionService(error);
+      return this.errorExecption.resp(error);
     }
   }
 
@@ -71,32 +72,19 @@ export class AuthService {
       }
     } catch (error) {
       console.log(error.message);
-      if (
-        error.name === 'PrismaClientValidationError' ||
-        `${error.message}`.includes('Illegal arguments')
-      ) {
-        return new BadRequestException().getResponse();
-      } else {
-        return new InternalServerErrorException(
-          'Internal Server Error',
-        ).getResponse();
-      }
+      return this.errorExecption.resp(error);
     }
   }
 
   async logout(logoutData: { token: string }) {
     try {
-      await this.prisma.auth.deleteMany({ where: { token: logoutData.token } });
+      await this.prisma.auth.deleteMany({
+        where: { token: { in: [logoutData.token] } },
+      });
 
       return new SuccessResponseService();
     } catch (error) {
-      if (error.name === 'PrismaClientValidationError') {
-        return new BadRequestException().getResponse();
-      } else {
-        return new InternalServerErrorException(
-          'Internal Server Error',
-        ).getResponse();
-      }
+      return this.errorExecption.resp(error);
     }
   }
 }

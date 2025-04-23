@@ -9,7 +9,6 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { role_user } from '@prisma/client';
 import { CreateUserDto } from './dto/create-user.dto';
 
 @Controller('user')

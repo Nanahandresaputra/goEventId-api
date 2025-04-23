@@ -10,17 +10,17 @@ import { SuccessResponseService } from 'src/helpers/success-response/success.ser
 import { Prisma } from '@prisma/client';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UtilsService } from 'src/helpers/utils/utils.service';
+import { ErrorExecptionService } from 'src/helpers/error-execption/error.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     private prisma: PrismaService,
     private utils: UtilsService,
+    private errorExecption: ErrorExecptionService,
   ) {}
 
   async create(userData: CreateUserDto) {
-    // return 'This action adds a new user';
-
     try {
       const hashPassword: string = this.utils.encryptPwd(userData.password);
 
@@ -34,14 +34,7 @@ export class UsersService {
 
       return new SuccessResponseService();
     } catch (error) {
-      console.log(error);
-      if (error.name === 'PrismaClientValidationError') {
-        return new BadRequestException().getResponse();
-      } else if (error.name === 'PrismaClientKnownRequestError') {
-        return new BadRequestException('Username already used!').getResponse();
-      } else {
-        return new InternalServerErrorException().getResponse();
-      }
+      return this.errorExecption.resp(error);
     }
   }
 
@@ -60,7 +53,7 @@ export class UsersService {
         })),
       });
     } catch (error) {
-      return new InternalServerErrorException().getResponse();
+      return this.errorExecption.resp(error);
     }
   }
 
@@ -85,34 +78,21 @@ export class UsersService {
 
   async update(id: number, userData: UpdateUserDto) {
     try {
-      // const user = await this.prisma.user.findUnique({
-      //   where: { id },
-      // });
-
-      // if (user?.id) {
-      //   this.prisma.user.update({ data: userData, where: { id } });
-
-      //   return new SuccessResponseService();
-      // } else {
-      //   throw new NotFoundException();
-      // }
-
       await this.prisma.user.update({ data: userData, where: { id } });
 
       return new SuccessResponseService();
     } catch (error) {
-      console.log(error.message);
-      if (error.name === 'PrismaClientValidationError') {
-        return new BadRequestException().getResponse();
-      } else if (error.name === 'PrismaClientKnownRequestError') {
-        return new BadRequestException('Username already used!').getResponse();
-      } else {
-        return new InternalServerErrorException().getResponse();
-      }
+      return this.errorExecption.resp(error);
     }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: number) {
+    try {
+      await this.prisma.user.delete({ where: { id } });
+
+      return new SuccessResponseService();
+    } catch (error) {
+      return this.errorExecption.resp(error);
+    }
   }
 }

@@ -6,20 +6,28 @@ import {
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 
-// @Injectable()
+@Injectable()
 export class ErrorExecptionService {
-  constructor(private error: any) {
-    if (this.error instanceof Prisma.PrismaClientKnownRequestError) {
-      if (this.error.code === 'P2002') {
-        const getTarget: any = this.error?.meta?.target;
-        throw new BadRequestException(
-          getTarget?.map((target) => `${target} already used!`),
-        );
+  constructor() {}
+
+  resp(error: any) {
+    console.log({ error });
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === 'P2002') {
+        const getTarget: any = error?.meta?.target;
+        return new BadRequestException(
+          getTarget?.map((target: string[]) => `${target} already used!`),
+        ).getResponse();
+      } else if (error.code === 'P2025') {
+        const getCause: any = error?.meta?.cause;
+        return new BadRequestException(getCause).getResponse();
       } else {
-        throw new BadRequestException();
+        return new BadRequestException().getResponse();
       }
+    } else if (error instanceof Prisma.PrismaClientValidationError) {
+      return new BadRequestException().getResponse();
     } else {
-      throw new InternalServerErrorException();
+      return new InternalServerErrorException().getResponse();
     }
   }
 }

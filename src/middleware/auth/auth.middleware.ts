@@ -20,8 +20,12 @@ export class AuthMiddleware implements NestMiddleware {
   async use(req: Request, res: Response, next: () => void) {
     const token: string = req.headers['token'];
 
+    // /goEventId/api/v1/auth/logout
+
     if (!token) {
       throw new UnauthorizedException();
+    } else if (req.url === '/goEventId/api/v1/auth/logout') {
+      return next();
     } else {
       try {
         const authValue = await this.prisma.auth.findFirst({
