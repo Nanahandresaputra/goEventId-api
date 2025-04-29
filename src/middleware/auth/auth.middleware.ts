@@ -37,8 +37,8 @@ export class AuthMiddleware implements NestMiddleware {
         } else {
           const fullUri = req.url;
 
-          const superAdminRoute = ['user'].map((path) => {
-            const extraPath = fullUri.split('/goEventId/api/v1/user')[1];
+          const superAdminRoute = ['user', 'kategori'].map((path) => {
+            const extraPath = fullUri.split(`/goEventId/api/v1/${path}`)[1];
 
             return extraPath === ''
               ? `/goEventId/api/v1/${path}`
