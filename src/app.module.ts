@@ -18,6 +18,9 @@ import { UtilsService } from './helpers/utils/utils.service';
 import { UtilsModule } from './helpers/utils/utils.module';
 import { KategoriModule } from './kategori/kategori.module';
 import { ErrorExecptionModule } from './helpers/error-execption/error.module';
+import { EventModule } from './event/event.module';
+import { PemesananModule } from './pemesanan/pemesanan.module';
+import { NestjsFormDataModule } from 'nestjs-form-data';
 
 @Module({
   imports: [
@@ -35,6 +38,8 @@ import { ErrorExecptionModule } from './helpers/error-execption/error.module';
     // }),
     UtilsModule,
     KategoriModule,
+    EventModule,
+    PemesananModule,
   ],
   controllers: [],
   providers: [],

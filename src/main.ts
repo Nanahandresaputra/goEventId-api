@@ -1,15 +1,28 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
+import { json } from 'body-parser';
+import { join } from 'path';
+import { existsSync, mkdirSync } from 'fs';
+import bodyParser = require('body-parser');
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('goEventId/api/v1');
+  app.use(json({ limit: '5mb' }));
+  const uploadDir = join(process.cwd(), 'uploads');
+  if (!existsSync(uploadDir)) {
+    mkdirSync(uploadDir);
+  }
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
+      // transformOptions: {
+      //   enableImplicitConversion: true, // <- This line here
+      // },
     }),
   );
+  // app.use(bodyParser.urlencoded({ extended: true }));
   await app.listen(process.env.PORT ?? 8080);
 }
 bootstrap();

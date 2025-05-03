@@ -31,6 +31,12 @@ enum status_pembayaran {
   berhasil
 }
 
+enum status_acara {
+  publish
+  draft
+  expired
+}
+
 model User {
   id Int @id @default(autoincrement()) 
   nama String @db.Text
@@ -73,6 +79,7 @@ model Acara {
   deskripsi String @db.Text
   banner_img String @db.Text
   map_tiket_img String? @db.Text
+  status status_acara @default(draft)
 
   kategori Kategori? @relation(fields: [kategori_id], references: [id], onDelete: SetNull)
   tiket_acara Tiket_Acara[]

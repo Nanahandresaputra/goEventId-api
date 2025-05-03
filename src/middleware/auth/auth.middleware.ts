@@ -37,13 +37,21 @@ export class AuthMiddleware implements NestMiddleware {
         } else {
           const fullUri = req.url;
 
-          const superAdminRoute = ['user', 'kategori'].map((path) => {
+          const superAdminRoute = ['user', 'kategori', 'acara'].map((path) => {
             const extraPath = fullUri.split(`/goEventId/api/v1/${path}`)[1];
 
             return extraPath === ''
               ? `/goEventId/api/v1/${path}`
               : `/goEventId/api/v1/${path}${extraPath}`;
           });
+
+          // const customerRoute = ['acara'].map((path) => {
+          //   const extraPath = fullUri.split(`/goEventId/api/v1/${path}`)[1];
+
+          //   return extraPath === ''
+          //     ? `/goEventId/api/v1/${path}`
+          //     : `/goEventId/api/v1/${path}${extraPath}`;
+          // });
 
           if (this.utils.decodeToken(token)?.role === role_user.superAdmin) {
             if (superAdminRoute.includes(fullUri)) {
