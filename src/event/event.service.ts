@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, MethodNotAllowedException } from '@nestjs/common';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { PrismaService } from 'src/db/prisma.service';
@@ -31,10 +31,22 @@ export class EventService {
 
   async findAll() {
     try {
-      const listEvent = await this.prisma.acara.findMany();
+      const listEvent = await this.prisma.acara.findMany({
+        select: {
+          id: true,
+          nama_acara: true,
+          kategori: { select: { nama_kategori: true } },
+          waktu_acara: true,
+          deskripsi: true,
+          banner_img: true,
+          map_tiket_img: true,
+          status: true,
+        },
+      });
 
       const sendResp = listEvent.map((data) => ({
         ...data,
+        kategori: data.kategori?.nama_kategori,
         waktu_acara: moment(data.waktu_acara).format('YYYY-MM-DD HH:mm:ss'),
       }));
 
@@ -46,18 +58,48 @@ export class EventService {
 
   async update(id: number, updateEventDto: UpdateEventDto) {
     try {
-      await this.prisma.acara.update({
-        data: { ...updateEventDto },
+      const getStatusAcara = await this.prisma.acara.findUnique({
+        select: { status: true },
         where: { id },
       });
 
-      return new SuccessResponseService();
+      if (getStatusAcara?.status === 'publish') {
+        return new MethodNotAllowedException(
+          'cannot update because acara is publish',
+        ).getResponse();
+      } else {
+        await this.prisma.acara.update({
+          data: { ...updateEventDto },
+          where: { id },
+        });
+
+        return new SuccessResponseService();
+      }
     } catch (error) {
       return this.errorExecption.resp(error);
     }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} event`;
+  async remove(id: number) {
+    try {
+      const getStatusAcara = await this.prisma.acara.findUnique({
+        select: { status: true },
+        where: { id },
+      });
+
+      if (getStatusAcara?.status === 'publish') {
+        return new MethodNotAllowedException(
+          'cannot delete because acara is publish',
+        ).getResponse();
+      } else {
+        await this.prisma.acara.delete({
+          where: { id },
+        });
+
+        return new SuccessResponseService();
+      }
+    } catch (error) {
+      return this.errorExecption.resp(error);
+    }
   }
 }

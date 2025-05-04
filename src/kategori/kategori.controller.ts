@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Headers,
 } from '@nestjs/common';
 import { KategoriService } from './kategori.service';
 import { CreateKategoriDto } from './dto/create-kategori.dto';
@@ -20,7 +21,7 @@ export class KategoriController {
     return this.kategoriService.create(createKategoriDto);
   }
 
-  @Get('list')
+  @Get()
   findAll() {
     return this.kategoriService.findAll();
   }
@@ -30,12 +31,12 @@ export class KategoriController {
   //   return this.kategoriService.findOne(+id);
   // }
 
-  @Patch(':id')
+  @Patch()
   update(
-    @Param('id') id: string,
+    @Headers() headers: { id: number },
     @Body() updateKategoriDto: UpdateKategoriDto,
   ) {
-    return this.kategoriService.update(+id, updateKategoriDto);
+    return this.kategoriService.update(+headers.id, updateKategoriDto);
   }
 
   // @Delete(':id')

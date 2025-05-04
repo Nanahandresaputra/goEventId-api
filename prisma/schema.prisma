@@ -75,7 +75,7 @@ model Acara {
   id Int @id @default(autoincrement())
   nama_acara String @db.Text
   waktu_acara DateTime @db.Timestamptz(3)
-  kategori_id Int?
+  kategori_id Int? @db.Integer
   deskripsi String @db.Text
   banner_img String @db.Text
   map_tiket_img String? @db.Text
@@ -89,11 +89,11 @@ model Acara {
 
 model Tiket_Acara {
   id Int @id @default(autoincrement())
-  acara_id Int
+  acara_id Int @db.Integer
   tipe_tiket String @db.Text
-  kuota Int
-  tiket_terjual Int
-  harga_tiket Int
+  kuota Int @db.Integer
+  tiket_terjual Int @default(0)
+  harga_tiket Int @db.Integer
   
   acara Acara @relation(fields: [acara_id], references: [id], onDelete: Cascade)
   orders Order[]
@@ -104,12 +104,12 @@ model Tiket_Acara {
 
 model Pemesanan {
   id Int @id @default(autoincrement())
-  user_id Int
+  user_id Int @db.Integer
   kode_pemesanan String @db.Text
   status_pembayaran status_pembayaran @default(pending)
   createdAt DateTime @default(now()) @db.Timestamptz(3)
 
-  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  users User @relation(fields: [user_id], references: [id], onDelete: Cascade)
   orders Order[]
 
   @@map("pemesanan")
@@ -117,8 +117,8 @@ model Pemesanan {
 
 model Order {
   id Int @id @default(autoincrement())
-  pemesanan_id Int
-  tiket_acara_id Int
+  pemesanan_id Int @db.Integer
+  tiket_acara_id Int @db.Integer
   kode_order String @db.Text
   status status_order @default(belum_digunakan)
   createdAt DateTime @default(now()) @db.Timestamptz(3)

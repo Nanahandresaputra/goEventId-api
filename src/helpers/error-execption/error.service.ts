@@ -11,7 +11,12 @@ export class ErrorExecptionService {
   constructor() {}
 
   resp(error: any) {
-    console.log({ error });
+    console.log({
+      error,
+      code: error.code,
+      name: error.name,
+      type: typeof error,
+    });
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code === 'P2002') {
         const getTarget: any = error?.meta?.target;
@@ -24,7 +29,10 @@ export class ErrorExecptionService {
       } else {
         return new BadRequestException().getResponse();
       }
-    } else if (error instanceof Prisma.PrismaClientValidationError) {
+    } else if (
+      error instanceof Prisma.PrismaClientValidationError ||
+      error.name === 'PrismaClientValidationError'
+    ) {
       return new BadRequestException().getResponse();
     } else {
       return new InternalServerErrorException().getResponse();

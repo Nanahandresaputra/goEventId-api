@@ -37,7 +37,12 @@ export class AuthMiddleware implements NestMiddleware {
         } else {
           const fullUri = req.url;
 
-          const superAdminRoute = ['user', 'kategori', 'acara'].map((path) => {
+          const superAdminRoute = [
+            'user',
+            'kategori',
+            'acara',
+            'tiket-acara',
+          ].map((path) => {
             const extraPath = fullUri.split(`/goEventId/api/v1/${path}`)[1];
 
             return extraPath === ''
@@ -45,16 +50,24 @@ export class AuthMiddleware implements NestMiddleware {
               : `/goEventId/api/v1/${path}${extraPath}`;
           });
 
-          // const customerRoute = ['acara'].map((path) => {
-          //   const extraPath = fullUri.split(`/goEventId/api/v1/${path}`)[1];
+          const customerRoute = ['pemesanan'].map((path) => {
+            const extraPath = fullUri.split(`/goEventId/api/v1/${path}`)[1];
 
-          //   return extraPath === ''
-          //     ? `/goEventId/api/v1/${path}`
-          //     : `/goEventId/api/v1/${path}${extraPath}`;
-          // });
+            return extraPath === ''
+              ? `/goEventId/api/v1/${path}`
+              : `/goEventId/api/v1/${path}${extraPath}`;
+          });
 
           if (this.utils.decodeToken(token)?.role === role_user.superAdmin) {
             if (superAdminRoute.includes(fullUri)) {
+              return next();
+            } else {
+              throw new ForbiddenException();
+            }
+          } else if (
+            this.utils.decodeToken(token)?.role === role_user.customer
+          ) {
+            if (customerRoute.includes(fullUri)) {
               return next();
             } else {
               throw new ForbiddenException();

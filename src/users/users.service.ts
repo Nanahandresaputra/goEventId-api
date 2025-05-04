@@ -57,24 +57,24 @@ export class UsersService {
     }
   }
 
-  async findOne(id: number) {
-    try {
-      const user = await this.prisma.user.findUnique({ where: { id } });
+  // async findOne(id: number) {
+  //   try {
+  //     const user = await this.prisma.user.findUnique({ where: { id } });
 
-      return new SuccessResponseService({
-        data: {
-          id: user?.id,
-          nama: user?.nama,
-          username: user?.username,
-          email: user?.email,
-          status: user?.status,
-          role: user?.role,
-        },
-      });
-    } catch (error) {
-      return new InternalServerErrorException().getResponse();
-    }
-  }
+  //     return new SuccessResponseService({
+  //       data: {
+  //         id: user?.id,
+  //         nama: user?.nama,
+  //         username: user?.username,
+  //         email: user?.email,
+  //         status: user?.status,
+  //         role: user?.role,
+  //       },
+  //     });
+  //   } catch (error) {
+  //     return new InternalServerErrorException().getResponse();
+  //   }
+  // }
 
   async update(id: number, userData: UpdateUserDto) {
     try {

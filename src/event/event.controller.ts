@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Headers,
 } from '@nestjs/common';
 import { EventService } from './event.service';
 import { CreateEventDto } from './dto/create-event.dto';
@@ -25,13 +26,16 @@ export class EventController {
     return this.eventService.findAll();
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateEventDto: UpdateEventDto) {
-    return this.eventService.update(+id, updateEventDto);
+  @Patch()
+  update(
+    @Headers() headers: { id: number },
+    @Body() updateEventDto: UpdateEventDto,
+  ) {
+    return this.eventService.update(+headers.id, updateEventDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.eventService.remove(+id);
+  @Delete()
+  remove(@Headers() headers: { id: number }) {
+    return this.eventService.remove(+headers.id);
   }
 }

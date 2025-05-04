@@ -21,6 +21,7 @@ import { ErrorExecptionModule } from './helpers/error-execption/error.module';
 import { EventModule } from './event/event.module';
 import { PemesananModule } from './pemesanan/pemesanan.module';
 import { NestjsFormDataModule } from 'nestjs-form-data';
+import { TiketAcaraModule } from './tiket_acara/tiket_acara.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { NestjsFormDataModule } from 'nestjs-form-data';
     KategoriModule,
     EventModule,
     PemesananModule,
+    TiketAcaraModule,
   ],
   controllers: [],
   providers: [],
