@@ -129,3 +129,24 @@ model Order {
   @@map("orders")
 }
 
+model Provinsi {
+  id Int @id @default(autoincrement())
+  nama String @db.Text
+  latitude String @db.Text
+  longitude String @db.Text
+
+
+  @@map("provinsi")
+}
+
+
+model KabupatenKota {
+  id Int @id @default(autoincrement())
+  nama String @db.Text
+  latitude String @db.Text
+  longitude String @db.Text
+
+
+  @@map("kabupatenkota")
+}
+
