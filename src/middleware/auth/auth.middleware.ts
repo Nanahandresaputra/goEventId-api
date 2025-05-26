@@ -50,7 +50,7 @@ export class AuthMiddleware implements NestMiddleware {
               : `/goEventId/api/v1/${path}${extraPath}`;
           });
 
-          const customerRoute = ['pemesanan'].map((path) => {
+          const customerRoute = ['pemesanan', 'payment'].map((path) => {
             const extraPath = fullUri.split(`/goEventId/api/v1/${path}`)[1];
 
             return extraPath === ''

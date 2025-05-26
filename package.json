@@ -35,12 +35,18 @@
     "class-validator": "^0.14.1",
     "dotenv": "^16.5.0",
     "jsonwebtoken": "^9.0.2",
+    "midtrans-client": "^1.4.2",
     "moment": "^2.30.1",
     "multer": "^1.4.5-lts.2",
     "nest-casl": "^1.9.15",
     "nestjs-form-data": "^1.9.93",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1"
+  },
+  "overrides": {
+    "@ruraim/nestjs-midtrans": {
+      "@nestjs/common": "^11.0.1"
+    }
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",

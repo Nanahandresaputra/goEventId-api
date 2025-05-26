@@ -1,6 +1,5 @@
 import { Controller, Post, Body, Patch, Delete, Headers } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { role_user } from '@prisma/client';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 

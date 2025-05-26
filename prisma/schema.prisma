@@ -123,7 +123,7 @@ model Order {
   status status_order @default(belum_digunakan)
   createdAt DateTime @default(now()) @db.Timestamptz(3)
 
-  tiket_acara Tiket_Acara? @relation(fields: [tiket_acara_id], references: [id], onDelete: Cascade)
+  tiket_acara Tiket_Acara @relation(fields: [tiket_acara_id], references: [id], onDelete: Cascade)
   pemesanan Pemesanan @relation(fields: [pemesanan_id], references: [id], onDelete: Cascade )
 
   @@map("orders")
