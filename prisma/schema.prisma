@@ -38,24 +38,24 @@ enum status_acara {
 }
 
 model User {
-  id Int @id @default(autoincrement()) 
-  nama String @db.Text
-  username String @db.Text @unique
-  email String @db.Text
-  password String @db.Text
-  status Int 
-  role role_user @default(customer)
+  id       Int       @id @default(autoincrement())
+  nama     String    @db.Text
+  username String    @unique @db.Text
+  email    String    @db.Text
+  password String    @db.Text
+  status   Int
+  role     role_user @default(customer)
 
-  auth Auth[]
+  auth      Auth[]
   pemesanan Pemesanan[]
 
   @@map("users")
 }
 
 model Auth {
-  id Int @id @default(autoincrement())
-  user_id Int 
-  token String? @db.Text
+  id      Int     @id @default(autoincrement())
+  user_id Int
+  token   String? @db.Text
 
   user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
@@ -63,8 +63,8 @@ model Auth {
 }
 
 model Kategori {
-  id Int @id @default(autoincrement())
-  nama_kategori String  @db.Text 
+  id            Int    @id @default(autoincrement())
+  nama_kategori String @db.Text
 
   acara Acara[]
 
@@ -72,81 +72,85 @@ model Kategori {
 }
 
 model Acara {
-  id Int @id @default(autoincrement())
-  nama_acara String @db.Text
-  waktu_acara DateTime @db.Timestamptz(3)
-  kategori_id Int? @db.Integer
-  deskripsi String @db.Text
-  banner_img String @db.Text
-  map_tiket_img String? @db.Text
-  status status_acara @default(draft)
+  id                Int          @id @default(autoincrement())
+  nama_acara        String       @db.Text
+  waktu_acara       DateTime     @db.Timestamptz(3)
+  kategori_id       Int?         @db.Integer
+  deskripsi         String       @db.Text
+  status            status_acara @default(draft)
+  provinsi_id       Int?         @db.Integer
+  kabupaten_kota_id Int?         @db.Integer
+  alamat            String       @db.Text
+  banner_img        String       @db.Text
+  map_tiket_img     String?      @db.Text
 
-  kategori Kategori? @relation(fields: [kategori_id], references: [id], onDelete: SetNull)
-  tiket_acara Tiket_Acara[]
+  provinsi      Provinsi?      @relation(fields: [provinsi_id], references: [id])
+  kabupatenkota KabupatenKota? @relation(fields: [kabupaten_kota_id], references: [id])
+  kategori      Kategori?      @relation(fields: [kategori_id], references: [id], onDelete: SetNull)
+  tiket_acara   Tiket_Acara[]
 
   @@map("acara")
 }
 
 model Tiket_Acara {
-  id Int @id @default(autoincrement())
-  acara_id Int @db.Integer
-  tipe_tiket String @db.Text
-  kuota Int @db.Integer
-  tiket_terjual Int @default(0)
-  harga_tiket Int @db.Integer
-  
-  acara Acara @relation(fields: [acara_id], references: [id], onDelete: Cascade)
+  id            Int    @id @default(autoincrement())
+  acara_id      Int    @db.Integer
+  tipe_tiket    String @db.Text
+  kuota         Int    @db.Integer
+  tiket_terjual Int    @default(0)
+  harga_tiket   Int    @db.Integer
+
+  acara  Acara   @relation(fields: [acara_id], references: [id], onDelete: Cascade)
   orders Order[]
 
   @@map("tiket_acara")
 }
 
-
 model Pemesanan {
-  id Int @id @default(autoincrement())
-  user_id Int @db.Integer
-  kode_pemesanan String @db.Text
+  id                Int               @id @default(autoincrement())
+  user_id           Int               @db.Integer
+  kode_pemesanan    String            @db.Text
   status_pembayaran status_pembayaran @default(pending)
-  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  createdAt         DateTime          @default(now()) @db.Timestamptz(3)
 
-  users User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  users  User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
   orders Order[]
 
   @@map("pemesanan")
 }
 
 model Order {
-  id Int @id @default(autoincrement())
-  pemesanan_id Int @db.Integer
-  tiket_acara_id Int @db.Integer
-  kode_order String @db.Text
-  status status_order @default(belum_digunakan)
-  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  id             Int          @id @default(autoincrement())
+  pemesanan_id   Int          @db.Integer
+  tiket_acara_id Int          @db.Integer
+  kode_order     String       @db.Text
+  status         status_order @default(belum_digunakan)
+  createdAt      DateTime     @default(now()) @db.Timestamptz(3)
 
   tiket_acara Tiket_Acara @relation(fields: [tiket_acara_id], references: [id], onDelete: Cascade)
-  pemesanan Pemesanan @relation(fields: [pemesanan_id], references: [id], onDelete: Cascade )
+  pemesanan   Pemesanan   @relation(fields: [pemesanan_id], references: [id], onDelete: Cascade)
 
   @@map("orders")
 }
 
 model Provinsi {
-  id Int @id @default(autoincrement())
-  nama String @db.Text
-  latitude String @db.Text
+  id        Int    @id @default(autoincrement())
+  nama      String @db.Text
+  latitude  String @db.Text
   longitude String @db.Text
 
+  acara Acara[]
 
   @@map("provinsi")
 }
 
-
 model KabupatenKota {
-  id Int @id @default(autoincrement())
-  nama String @db.Text
-  latitude String @db.Text
+  id        Int    @id @default(autoincrement())
+  nama      String @db.Text
+  latitude  String @db.Text
   longitude String @db.Text
 
+  acara Acara[]
 
   @@map("kabupatenkota")
 }
-

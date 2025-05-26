@@ -16,6 +16,7 @@ export class ErrorExecptionService {
       code: error.code,
       name: error.name,
       type: typeof error,
+      message: error.message,
     });
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code === 'P2002') {
@@ -34,6 +35,8 @@ export class ErrorExecptionService {
       error.name === 'PrismaClientValidationError'
     ) {
       return new BadRequestException().getResponse();
+    } else if (error.name === 'MidtransError') {
+      return new BadRequestException(error.message).getResponse();
     } else {
       return new InternalServerErrorException().getResponse();
     }

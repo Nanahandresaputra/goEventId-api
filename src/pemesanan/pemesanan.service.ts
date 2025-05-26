@@ -20,20 +20,24 @@ export class PemesananService {
       const decodeToken = this.utils.decodeToken(userToken.token);
       const userId: number = decodeToken?.id;
 
-      function generateOrderNumber(): string {
-        const timestamp = Date.now();
-        const orderNumber = `${timestamp}`;
+      function generateOrderNumber() {
+        const timestamp = new Date();
+        const orderNumber =
+          `${Math.random().toString(36).substring(6) + parseInt(`${timestamp.toISOString().slice(0, 10)}`.replace('-', '')) * timestamp.getTime()}`.toUpperCase();
         return orderNumber;
       }
 
       const createPemesanan = await this.prisma.pemesanan.create({
-        data: { kode_pemesanan: generateOrderNumber(), user_id: userId },
+        data: {
+          kode_pemesanan: `GE${`${generateOrderNumber()}`.substring(0, 14)}ID`,
+          user_id: userId,
+        },
       });
 
       const sendOrder = [...Array(createPemesananDto.ticketQty)].map(() => ({
         pemesanan_id: createPemesanan.id,
         tiket_acara_id: createPemesananDto.tiket_acara_id,
-        kode_order: `ORD-${generateOrderNumber()}`,
+        kode_order: `ORD-${generateOrderNumber()}`.substring(0, 15),
       }));
 
       await this.prisma.order.createMany({ data: sendOrder });

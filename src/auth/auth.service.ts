@@ -54,6 +54,7 @@ export class AuthService {
             id: user.id,
             name: user.nama,
             role: user.role,
+            email: user.email,
           },
           { secret: config.secretKey },
         );

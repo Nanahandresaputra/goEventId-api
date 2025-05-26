@@ -1,2 +1,5 @@
 DATABASE_URL= "databaseType://YourUserName:YourPassword@YourHostname:port/YourDatabaseName";
-SECRET_KEY
+SECRET_KEY=
+MIDTRANS_CLIENT_KEY=
+MIDTRANS_MERCHANT_ID=
+MIDTRANS_SERVER_KEY=

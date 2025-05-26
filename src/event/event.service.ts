@@ -35,18 +35,21 @@ export class EventService {
         select: {
           id: true,
           nama_acara: true,
-          kategori: { select: { nama_kategori: true } },
+          kategori: { select: { id: true, nama_kategori: true } },
           waktu_acara: true,
           deskripsi: true,
+          status: true,
+          provinsi: { select: { id: true, nama: true } },
+          kabupatenkota: { select: { id: true, nama: true } },
+          alamat: true,
           banner_img: true,
           map_tiket_img: true,
-          status: true,
         },
       });
 
       const sendResp = listEvent.map((data) => ({
         ...data,
-        kategori: data.kategori?.nama_kategori,
+        // kategori: data.kategori?.nama_kategori,
         waktu_acara: moment(data.waktu_acara).format('YYYY-MM-DD HH:mm:ss'),
       }));
 

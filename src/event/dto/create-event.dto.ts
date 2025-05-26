@@ -23,6 +23,18 @@ export class CreateEventDto {
   @IsString()
   deskripsi: string;
 
+  @IsNumber()
+  @IsNotEmpty()
+  provinsi_id: number;
+
+  @IsNumber()
+  @IsNotEmpty()
+  kabupaten_kota_id: number;
+
+  @IsNotEmpty()
+  @IsString()
+  alamat: string;
+
   @IsString()
   @IsNotEmpty()
   banner_img: string;

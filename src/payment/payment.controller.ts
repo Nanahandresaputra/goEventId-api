@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Headers,
 } from '@nestjs/common';
 import { PaymentService } from './payment.service';
 import { CreatePaymentDto } from './dto/create-payment.dto';
@@ -16,7 +17,10 @@ export class PaymentController {
   constructor(private readonly paymentService: PaymentService) {}
 
   @Post()
-  create(@Body() createPaymentDto: CreatePaymentDto) {
-    return this.paymentService.createPayment(createPaymentDto);
+  create(
+    @Body() createPaymentDto: CreatePaymentDto,
+    @Headers() headers: { token: string },
+  ) {
+    return this.paymentService.createPayment(createPaymentDto, headers);
   }
 }
