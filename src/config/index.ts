@@ -6,4 +6,5 @@ export const config = {
   midtransClientKey: process.env.MIDTRANS_CLIENT_KEY as string,
   midtransMerchantId: process.env.MIDTRANS_MERCHANT_ID as string,
   midtransServerKey: process.env.MIDTRANS_SERVER_KEY as string,
+  midtransAuthorization: process.env.MIDTRANS_AUTHORIZATION as string,
 };

@@ -6,6 +6,7 @@ import { SuccessResponseService } from 'src/helpers/success-response/success.ser
 import { ErrorExecptionService } from 'src/helpers/error-execption/error.service';
 import * as midtransClient from 'midtrans-client';
 import { config } from 'src/config';
+import { UpdateStatusPemesananDto } from './dto/update-status-pemesanan.dto';
 
 @Injectable()
 export class PemesananService {
@@ -114,6 +115,78 @@ export class PemesananService {
           redirect_url: transaction.redirect_url,
         },
       });
+    } catch (error) {
+      return this.errorExecption.resp(error);
+    }
+  }
+
+  async checkStatusPayment(updateStatusPemesananDto: UpdateStatusPemesananDto) {
+    try {
+      const getTotalOrders = await this.prisma.pemesanan.findFirst({
+        where: { kode_pemesanan: updateStatusPemesananDto.kode_pemesanan },
+        select: {
+          orders: { select: { kode_order: true, tiket_acara_id: true } },
+        },
+      });
+
+      const getTiketAcaraData = await this.prisma.tiket_Acara.findUnique({
+        where: { id: getTotalOrders?.orders?.[0]?.tiket_acara_id },
+      });
+
+      const getMidtransStatusPayment = await fetch(
+        `https://api.sandbox.midtrans.com/v2/${updateStatusPemesananDto.kode_pemesanan}/status`,
+        {
+          method: 'GET',
+          headers: {
+            Authorization: config.midtransAuthorization,
+          },
+        },
+      )
+        .then((res) => res.json())
+        .then((res) => {
+          return res;
+        })
+        .catch(() => {
+          throw new Error();
+        });
+
+      const midtransResp = {
+        status_code: getMidtransStatusPayment?.status_code,
+        kode_pemesanan: getMidtransStatusPayment?.order_id,
+        transaction_status: getMidtransStatusPayment?.transaction_status,
+        gross_amount: getMidtransStatusPayment?.gross_amount,
+      };
+      if (getMidtransStatusPayment?.order_id) {
+        if (
+          ['settlement', 'success'].includes(midtransResp.transaction_status)
+        ) {
+          await this.prisma.pemesanan.updateMany({
+            data: { status_pembayaran: 'berhasil' },
+            where: { kode_pemesanan: midtransResp.kode_pemesanan },
+          });
+
+          await this.prisma.tiket_Acara.update({
+            where: { id: getTiketAcaraData?.id },
+            data: {
+              tiket_terjual:
+                (getTiketAcaraData?.tiket_terjual ?? 0) +
+                (getTotalOrders?.orders?.length ?? 0),
+            },
+          });
+        } else if (
+          !['settlement', 'success'].includes(
+            midtransResp.transaction_status,
+          ) ||
+          midtransResp.transaction_status !== 'pending'
+        ) {
+          await this.prisma.pemesanan.updateMany({
+            data: { status_pembayaran: 'gagal' },
+            where: { kode_pemesanan: midtransResp.kode_pemesanan },
+          });
+        }
+      }
+
+      return new SuccessResponseService();
     } catch (error) {
       return this.errorExecption.resp(error);
     }
