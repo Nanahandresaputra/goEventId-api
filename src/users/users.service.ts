@@ -46,7 +46,6 @@ export class UsersService {
         data: listUsers.map((user) => ({
           id: user.id,
           nama: user.nama,
-          username: user.username,
           email: user.email,
           status: user.status,
           role: user.role,

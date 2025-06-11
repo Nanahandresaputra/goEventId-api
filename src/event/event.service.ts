@@ -35,6 +35,7 @@ export class EventService {
         select: {
           id: true,
           nama_acara: true,
+          user: { select: { id: true, nama: true } },
           kategori: { select: { id: true, nama_kategori: true } },
           waktu_acara: true,
           deskripsi: true,

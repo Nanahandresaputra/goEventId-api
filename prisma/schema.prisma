@@ -17,6 +17,7 @@ enum role_user {
   admin
   customer
   superAdmin
+  penyelenggara
 }
 
 enum status_order {
@@ -40,14 +41,14 @@ enum status_acara {
 model User {
   id       Int       @id @default(autoincrement())
   nama     String    @db.Text
-  username String    @unique @db.Text
-  email    String    @db.Text
+  email    String    @unique @db.Text
   password String    @db.Text
   status   Int
   role     role_user @default(customer)
 
   auth      Auth[]
   pemesanan Pemesanan[]
+  acara     Acara[]
 
   @@map("users")
 }
@@ -72,18 +73,20 @@ model Kategori {
 }
 
 model Acara {
-  id                Int          @id @default(autoincrement())
-  nama_acara        String       @db.Text
-  waktu_acara       DateTime     @db.Timestamptz(3)
-  kategori_id       Int?         @db.Integer
-  deskripsi         String       @db.Text
-  status            status_acara @default(draft)
-  provinsi_id       Int?         @db.Integer
-  kabupaten_kota_id Int?         @db.Integer
-  alamat            String       @db.Text
-  banner_img        String       @db.Text
-  map_tiket_img     String?      @db.Text
+  id                    Int          @id @default(autoincrement())
+  nama_acara            String       @db.Text
+  waktu_acara           DateTime     @db.Timestamptz(3)
+  kategori_id           Int?         @db.Integer
+  deskripsi             String       @db.Text
+  status                status_acara @default(draft)
+  provinsi_id           Int?         @db.Integer
+  kabupaten_kota_id     Int?         @db.Integer
+  alamat                String       @db.Text
+  banner_img            String       @db.Text
+  map_tiket_img         String?      @db.Text
+  user_id_penyelenggara Int?         @db.Integer
 
+  user          User?          @relation(fields: [user_id_penyelenggara], references: [id])
   provinsi      Provinsi?      @relation(fields: [provinsi_id], references: [id])
   kabupatenkota KabupatenKota? @relation(fields: [kabupaten_kota_id], references: [id])
   kategori      Kategori?      @relation(fields: [kategori_id], references: [id], onDelete: SetNull)
@@ -111,7 +114,7 @@ model Pemesanan {
   user_id           Int               @db.Integer
   kode_pemesanan    String            @db.Text
   status_pembayaran status_pembayaran @default(pending)
-  createdAt         DateTime          @default(now()) @db.Timestamptz(3)
+  createdat         DateTime          @default(now()) @db.Timestamptz(3)
 
   users  User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
   orders Order[]
@@ -125,7 +128,7 @@ model Order {
   tiket_acara_id Int          @db.Integer
   kode_order     String       @db.Text
   status         status_order @default(belum_digunakan)
-  createdAt      DateTime     @default(now()) @db.Timestamptz(3)
+  createdat      DateTime     @default(now()) @db.Timestamptz(3)
 
   tiket_acara Tiket_Acara @relation(fields: [tiket_acara_id], references: [id], onDelete: Cascade)
   pemesanan   Pemesanan   @relation(fields: [pemesanan_id], references: [id], onDelete: Cascade)

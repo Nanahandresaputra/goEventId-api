@@ -44,7 +44,7 @@ export class AuthService {
     try {
       const user = await this.prisma.user.findUnique({
         where: {
-          username: loginData.username,
+          email: loginData.email,
         },
       });
 
@@ -68,7 +68,7 @@ export class AuthService {
         });
       } else {
         return new UnauthorizedException(
-          'username or password invalid!',
+          'email or password invalid!',
         ).getResponse();
       }
     } catch (error) {

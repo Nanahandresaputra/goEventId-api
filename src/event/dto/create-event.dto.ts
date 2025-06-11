@@ -19,6 +19,10 @@ export class CreateEventDto {
   @IsNotEmpty()
   kategori_id: number;
 
+  @IsNumber()
+  @IsNotEmpty()
+  user_id_penyelenggara: number;
+
   @IsOptional()
   @IsString()
   deskripsi: string;

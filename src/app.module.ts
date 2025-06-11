@@ -17,6 +17,9 @@ import { ErrorExecptionModule } from './helpers/error-execption/error.module';
 import { EventModule } from './event/event.module';
 import { PemesananModule } from './pemesanan/pemesanan.module';
 import { TiketAcaraModule } from './tiket_acara/tiket_acara.module';
+import { ReportingModule } from './reporting/reporting.module';
+import { RiwayatModule } from './riwayat/riwayat.module';
+import { PenyelenggaraModule } from './penyelenggara/penyelenggara.module';
 
 @Module({
   imports: [
@@ -37,6 +40,9 @@ import { TiketAcaraModule } from './tiket_acara/tiket_acara.module';
     EventModule,
     PemesananModule,
     TiketAcaraModule,
+    ReportingModule,
+    RiwayatModule,
+    PenyelenggaraModule,
   ],
   controllers: [],
   providers: [],
