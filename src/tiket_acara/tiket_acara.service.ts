@@ -50,7 +50,7 @@ export class TiketAcaraService {
         ...data,
         acara: data.acara.nama_acara,
         kategori: data.acara.kategori?.nama_kategori,
-        remaining_tickets: +data.kuota - +data.tiket_terjual,
+        stok_tersisa: +data.kuota - +data.tiket_terjual,
       }));
 
       return new SuccessResponseService({ data: sendRespData });

@@ -48,11 +48,18 @@ export class EventService {
         },
       });
 
-      const sendResp = listEvent.map((data) => ({
-        ...data,
-        // kategori: data.kategori?.nama_kategori,
-        waktu_acara: moment(data.waktu_acara).format('YYYY-MM-DD HH:mm:ss'),
-      }));
+      const sendResp = listEvent.map((data) => {
+        let allData = {
+          ...data,
+          // kategori: data.kategori?.nama_kategori,
+          penyelenggara: data.user,
+          waktu_acara: moment(data.waktu_acara).format('YYYY-MM-DD HH:mm:ss'),
+        };
+
+        delete (allData as any).user;
+
+        return allData;
+      });
 
       return new SuccessResponseService({ data: sendResp });
     } catch (error) {
