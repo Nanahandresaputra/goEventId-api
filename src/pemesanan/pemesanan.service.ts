@@ -113,6 +113,7 @@ export class PemesananService {
         data: {
           token: transaction.token,
           redirect_url: transaction.redirect_url,
+          kode_pemesanan: sendResp.transaction_details.order_id,
         },
       });
     } catch (error) {

@@ -72,7 +72,6 @@ export class AuthService {
         ).getResponse();
       }
     } catch (error) {
-      console.log(error.message);
       return this.errorExecption.resp(error);
     }
   }
