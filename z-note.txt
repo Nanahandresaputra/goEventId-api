@@ -1,2 +1,13 @@
 npx @nestjs/cli generate middleware
 npx @nestjs/cli generate resource user
+
+
+feature dashboard
+
+- penjualan perbulan perkategori
+    - kategori
+    - jumlah
+    
+- top 5 penjualan terlaris
+    - nama acara
+    - total penjualan

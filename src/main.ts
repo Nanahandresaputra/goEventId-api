@@ -14,6 +14,8 @@ async function bootstrap() {
   if (!existsSync(uploadDir)) {
     mkdirSync(uploadDir);
   }
+  app.enableCors();
+
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,

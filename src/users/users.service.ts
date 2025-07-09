@@ -7,7 +7,7 @@ import {
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/db/prisma.service';
 import { SuccessResponseService } from 'src/helpers/success-response/success.service';
-import { Prisma } from '@prisma/client';
+import { Prisma, role_user } from '@prisma/client';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UtilsService } from 'src/helpers/utils/utils.service';
 import { ErrorExecptionService } from 'src/helpers/error-execption/error.service';
@@ -40,7 +40,9 @@ export class UsersService {
 
   async findAll() {
     try {
-      const listUsers = await this.prisma.user.findMany();
+      const listUsers = await this.prisma.user.findMany({
+        where: { role: role_user.superAdmin },
+      });
 
       return new SuccessResponseService({
         data: listUsers.map((user) => ({

@@ -20,6 +20,8 @@ import { TiketAcaraModule } from './tiket_acara/tiket_acara.module';
 import { ReportingModule } from './reporting/reporting.module';
 import { RiwayatModule } from './riwayat/riwayat.module';
 import { PenyelenggaraModule } from './penyelenggara/penyelenggara.module';
+import { ProvinsiModule } from './provinsi/provinsi.module';
+import { KabupatenkotaModule } from './kabupatenkota/kabupatenkota.module';
 
 @Module({
   imports: [
@@ -43,6 +45,8 @@ import { PenyelenggaraModule } from './penyelenggara/penyelenggara.module';
     ReportingModule,
     RiwayatModule,
     PenyelenggaraModule,
+    ProvinsiModule,
+    KabupatenkotaModule,
   ],
   controllers: [],
   providers: [],

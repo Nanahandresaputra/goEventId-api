@@ -48,20 +48,25 @@ export class ReportingService {
         id: data.id,
         nama_acara: data.nama_acara,
         status: data.status,
+        waktu_acara: data.waktu_acara,
         totalTiketTerjual: data.tiket_acara.reduce(
           (accumulator, currentValue) =>
             accumulator + currentValue.tiket_terjual,
           0,
         ),
         totalPenjualan: data.tiket_acara.reduce(
-          (accumulator, currentValue) => accumulator + currentValue.harga_tiket,
+          (accumulator, currentValue) =>
+            accumulator + currentValue.tiket_terjual * currentValue.harga_tiket,
           0,
         ),
         details: {
           penyelenggara: data.user?.nama,
           waktu_acara: moment(data.waktu_acara).format('YYYY-MM-DD HH:mm:ss'),
           alamatLengkap: `${data.alamat}, ${data.kabupatenkota?.nama}, ${data.provinsi?.nama}`,
-          tiket: data.tiket_acara,
+          tiket: data.tiket_acara.map((tiket) => ({
+            ...tiket,
+            pendapatan_tiket: tiket.harga_tiket * tiket.tiket_terjual,
+          })),
         },
       }));
 

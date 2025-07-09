@@ -44,6 +44,8 @@ export class AuthMiddleware implements NestMiddleware {
             'tiket-acara',
             'reporting',
             'penyelenggara',
+            'provinsi',
+            'kabupatenkota',
           ].map((path) => {
             const extraPath = fullUri.split(`/goEventId/api/v1/${path}`)[1];
 
