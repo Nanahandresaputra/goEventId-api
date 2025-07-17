@@ -76,7 +76,11 @@ export class AuthMiddleware implements NestMiddleware {
               : `/goEventId/api/v1/${path}${extraPath}`;
           });
 
-          if (this.utils.decodeToken(token)?.role === role_user.superAdmin) {
+          if (
+            [role_user.superAdmin, role_user.admin].includes(
+              this.utils.decodeToken(token)?.role,
+            )
+          ) {
             if (superAdminRoute.includes(fullUri)) {
               return next();
             } else {

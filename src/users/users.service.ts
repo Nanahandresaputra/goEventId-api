@@ -41,7 +41,16 @@ export class UsersService {
   async findAll() {
     try {
       const listUsers = await this.prisma.user.findMany({
-        where: { role: role_user.superAdmin },
+        where: {
+          OR: [
+            // {
+            //   role: role_user.superAdmin,
+            // },
+            {
+              role: role_user.admin,
+            },
+          ],
+        },
       });
 
       return new SuccessResponseService({

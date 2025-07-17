@@ -21,9 +21,12 @@ export class ReportingService {
       const decodeToken = this.utils.decodeToken(token);
 
       const listReportingAdmin = await this.prisma.acara.findMany({
-        ...(decodeToken?.role === 'penyelenggara' && {
-          where: { user_id_penyelenggara: decodeToken?.id },
-        }),
+        where: {
+          status: 'publish',
+          ...(decodeToken?.role === 'penyelenggara' && {
+            user_id_penyelenggara: decodeToken?.id,
+          }),
+        },
         select: {
           id: true,
           nama_acara: true,
@@ -32,7 +35,7 @@ export class ReportingService {
           provinsi: { select: { nama: true } },
           kabupatenkota: { select: { nama: true } },
           status: true,
-          user: { select: { nama: true } },
+          user: { select: { nama: true, id: true } },
           tiket_acara: {
             select: {
               tipe_tiket: true,
@@ -61,6 +64,7 @@ export class ReportingService {
         ),
         details: {
           penyelenggara: data.user?.nama,
+          penyelenggara_id: data.user?.id,
           waktu_acara: moment(data.waktu_acara).format('YYYY-MM-DD HH:mm:ss'),
           alamatLengkap: `${data.alamat}, ${data.kabupatenkota?.nama}, ${data.provinsi?.nama}`,
           tiket: data.tiket_acara.map((tiket) => ({

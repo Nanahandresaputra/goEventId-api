@@ -80,7 +80,14 @@ export class EventService {
         ).getResponse();
       } else {
         await this.prisma.acara.update({
-          data: { ...updateEventDto },
+          data: {
+            ...updateEventDto,
+            ...(updateEventDto.waktu_acara && {
+              waktu_acara: new Date(
+                updateEventDto.waktu_acara ?? '',
+              ).toISOString(),
+            }),
+          },
           where: { id },
         });
 
