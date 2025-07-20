@@ -22,8 +22,8 @@ export class EventController {
   }
 
   @Get()
-  findAll() {
-    return this.eventService.findAll();
+  findAll(@Headers() headers: { token: string }) {
+    return this.eventService.findAll(headers.token);
   }
 
   @Patch()

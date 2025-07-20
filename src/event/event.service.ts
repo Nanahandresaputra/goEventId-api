@@ -6,6 +6,8 @@ import { ErrorExecptionService } from 'src/helpers/error-execption/error.service
 import { SuccessResponseService } from 'src/helpers/success-response/success.service';
 import * as moment from 'moment';
 import 'moment/locale/id'; // without this line it didn't work
+import { UtilsService } from 'src/helpers/utils/utils.service';
+import { role_user, status_acara } from '@prisma/client';
 moment.locale('id');
 
 @Injectable()
@@ -13,6 +15,7 @@ export class EventService {
   constructor(
     private prisma: PrismaService,
     private errorExecption: ErrorExecptionService,
+    private utils: UtilsService,
   ) {}
   async create(createEventDto: CreateEventDto) {
     try {
@@ -29,9 +32,22 @@ export class EventService {
     }
   }
 
-  async findAll() {
+  async findAll(token: string) {
     try {
+      const decodeToken = this.utils.decodeToken(token);
+
       const listEvent = await this.prisma.acara.findMany({
+        ...(decodeToken?.role !== role_user.admin && {
+          where: {
+            ...(decodeToken?.role === role_user.penyelenggara && {
+              user: { id: decodeToken?.id },
+            }),
+            ...(decodeToken?.role === role_user.customer && {
+              status: status_acara.publish,
+            }),
+          },
+        }),
+        orderBy: { waktu_acara: 'asc' },
         select: {
           id: true,
           nama_acara: true,

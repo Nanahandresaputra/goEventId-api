@@ -68,7 +68,14 @@ export class AuthMiddleware implements NestMiddleware {
               : `/goEventId/api/v1/${path}${extraPath}`;
           });
 
-          const penyelenggaraRoute = ['reporting'].map((path) => {
+          const penyelenggaraRoute = [
+            'kategori',
+            'acara',
+            'tiket-acara',
+            'provinsi',
+            'kabupatenkota',
+            'reporting',
+          ].map((path) => {
             const extraPath = fullUri.split(`/goEventId/api/v1/${path}`)[1];
 
             return extraPath === ''

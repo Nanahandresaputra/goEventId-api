@@ -30,6 +30,7 @@ export class TiketAcaraService {
   async findAll(acara_id: number) {
     try {
       const listTiket = await this.prisma.tiket_Acara.findMany({
+        orderBy: { harga_tiket: 'desc' },
         where: { acara_id },
         select: {
           id: true,
