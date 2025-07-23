@@ -26,6 +26,7 @@ export class UsersService {
 
       const sendValue: Prisma.UserCreateInput = {
         ...userData,
+        role: role_user.admin,
         password: hashPassword,
         status: 1,
       };

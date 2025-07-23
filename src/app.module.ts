@@ -22,6 +22,7 @@ import { RiwayatModule } from './riwayat/riwayat.module';
 import { PenyelenggaraModule } from './penyelenggara/penyelenggara.module';
 import { ProvinsiModule } from './provinsi/provinsi.module';
 import { KabupatenkotaModule } from './kabupatenkota/kabupatenkota.module';
+import { CheckInModule } from './check-in/check-in.module';
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { KabupatenkotaModule } from './kabupatenkota/kabupatenkota.module';
     PenyelenggaraModule,
     ProvinsiModule,
     KabupatenkotaModule,
+    CheckInModule,
   ],
   controllers: [],
   providers: [],
@@ -55,7 +57,7 @@ export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(AuthMiddleware)
-      .exclude('auth/login', 'auth/register')
+      .exclude('auth/login', 'auth/register', '/check-in')
       .forRoutes({
         path: '*path',
         method: RequestMethod.ALL,
