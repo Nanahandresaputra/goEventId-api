@@ -15,6 +15,7 @@ export class RiwayatService {
     try {
       const decodeToken = this.utils.decodeToken(token);
       const listRiwayat = await this.prisma.order.findMany({
+        orderBy: { createdat: 'desc' },
         where: {
           pemesanan: { user_id: decodeToken.id, status_pembayaran: 'berhasil' },
         },
