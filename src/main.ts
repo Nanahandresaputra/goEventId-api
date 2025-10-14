@@ -10,10 +10,10 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('goEventId/api/v1');
   app.use(json({ limit: '5mb' }));
-  const uploadDir = join(process.cwd(), 'uploads');
-  if (!existsSync(uploadDir)) {
-    mkdirSync(uploadDir);
-  }
+  // const uploadDir = join(process.cwd(), 'uploads');
+  // if (!existsSync(uploadDir)) {
+  //   mkdirSync(uploadDir);
+  // }
   app.enableCors();
 
   app.useGlobalPipes(
