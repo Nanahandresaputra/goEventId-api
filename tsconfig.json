@@ -16,6 +16,8 @@
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": false,
     "strictBindCallApply": false,
-    "noFallthroughCasesInSwitch": false
-  }
+    "noFallthroughCasesInSwitch": false,
+  },
+  // "include": ["node_modules/moment/locale/*"]
+   "include": ["src/**/*", "tests/**/*.ts,node_modules/moment/locale/*"]
 }

@@ -5,7 +5,7 @@ import { json } from 'body-parser';
 import { join } from 'path';
 import { existsSync, mkdirSync } from 'fs';
 import bodyParser = require('body-parser');
-import moment from 'moment';
+import * as moment from 'moment';
 
 async function bootstrap() {
   try {
