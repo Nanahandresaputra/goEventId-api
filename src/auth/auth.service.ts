@@ -6,7 +6,8 @@ import {
 } from '@nestjs/common';
 // import { PrismaService } from 'src/db/prisma.service'; // local
 import { PrismaService } from '../db/prisma.service'; // prod -> vercel
-import { checkEncrypt, encryptPwd } from 'src/helpers/utils/bcrypt';
+// import { checkEncrypt, encryptPwd } from 'src/helpers/utils/bcrypt'; local
+import { checkEncrypt, encryptPwd } from '../helpers/utils/bcrypt'; // prod -> vercel
 import { Prisma, role_user } from '@prisma/client';
 import { SuccessResponseService } from 'src/helpers/success-response/success.service';
 import { JwtService } from '@nestjs/jwt';
