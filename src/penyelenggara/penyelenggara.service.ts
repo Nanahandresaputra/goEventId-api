@@ -7,7 +7,7 @@ import { UtilsService } from 'src/helpers/utils/utils.service';
 import { ErrorExecptionService } from 'src/helpers/error-execption/error.service';
 import { Prisma } from '@prisma/client';
 import { SuccessResponseService } from 'src/helpers/success-response/success.service';
-import * as moment from 'moment';
+import moment from 'moment';
 import 'moment/locale/id'; // without this line it didn't work
 moment.locale('id');
 

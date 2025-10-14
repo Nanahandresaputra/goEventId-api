@@ -17,6 +17,7 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
+    "esModuleInterop": true,
   },
   // "include": ["node_modules/moment/locale/*"]
    "include": ["src/**/*", "tests/**/*.ts,node_modules/moment/locale/*"]

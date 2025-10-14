@@ -5,7 +5,7 @@ import { UpdateEventDto } from './dto/update-event.dto';
 import { PrismaService } from '../db/prisma.service'; // prod -> vercel
 import { ErrorExecptionService } from 'src/helpers/error-execption/error.service';
 import { SuccessResponseService } from 'src/helpers/success-response/success.service';
-import * as moment from 'moment';
+import moment from 'moment';
 import 'moment/locale/id'; // without this line it didn't work
 import { UtilsService } from 'src/helpers/utils/utils.service';
 import { role_user, status_acara } from '@prisma/client';
