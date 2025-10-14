@@ -5,7 +5,8 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { PrismaService } from 'src/db/prisma.service';
+// import { PrismaService } from 'src/db/prisma.service'; // local
+import { PrismaService } from '../db/prisma.service'; // prod -> vercel
 import { SuccessResponseService } from 'src/helpers/success-response/success.service';
 import { Prisma, role_user } from '@prisma/client';
 import { CreateUserDto } from './dto/create-user.dto';

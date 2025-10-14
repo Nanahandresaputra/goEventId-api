@@ -7,7 +7,8 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { role_user } from '@prisma/client';
-import { PrismaService } from 'src/db/prisma.service';
+// import { PrismaService } from 'src/db/prisma.service'; // local
+import { PrismaService } from '../../db/prisma.service'; // prod -> vercel
 import { UtilsService } from 'src/helpers/utils/utils.service';
 
 @Injectable()

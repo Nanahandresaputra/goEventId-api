@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
-import { PrismaService } from 'src/db/prisma.service';
+// import { PrismaService } from 'src/db/prisma.service'; // local
+import { PrismaService } from '../db/prisma.service'; // prod -> vercel
 import { ErrorExecptionService } from 'src/helpers/error-execption/error.service';
 import { SuccessResponseService } from 'src/helpers/success-response/success.service';
 

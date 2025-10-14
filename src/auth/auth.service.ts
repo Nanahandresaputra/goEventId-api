@@ -4,7 +4,8 @@ import {
   InternalServerErrorException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { PrismaService } from 'src/db/prisma.service';
+// import { PrismaService } from 'src/db/prisma.service'; // local
+import { PrismaService } from '../db/prisma.service'; // prod -> vercel
 import { checkEncrypt, encryptPwd } from 'src/helpers/utils/bcrypt';
 import { Prisma, role_user } from '@prisma/client';
 import { SuccessResponseService } from 'src/helpers/success-response/success.service';

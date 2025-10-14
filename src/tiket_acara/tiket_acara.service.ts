@@ -5,7 +5,8 @@ import {
 } from '@nestjs/common';
 import { CreateTiketAcaraDto } from './dto/create-tiket_acara.dto';
 import { UpdateTiketAcaraDto } from './dto/update-tiket_acara.dto';
-import { PrismaService } from 'src/db/prisma.service';
+// import { PrismaService } from 'src/db/prisma.service'; // local
+import { PrismaService } from '../db/prisma.service'; // prod -> vercel
 import { ErrorExecptionService } from './../helpers/error-execption/error.service';
 import { SuccessResponseService } from 'src/helpers/success-response/success.service';
 

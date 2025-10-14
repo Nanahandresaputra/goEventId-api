@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePenyelenggaraDto } from './dto/create-penyelenggara.dto';
 import { UpdatePenyelenggaraDto } from './dto/update-penyelenggara.dto';
-import { PrismaService } from 'src/db/prisma.service';
+// import { PrismaService } from 'src/db/prisma.service'; // local
+import { PrismaService } from '../db/prisma.service'; // prod -> vercel
 import { UtilsService } from 'src/helpers/utils/utils.service';
 import { ErrorExecptionService } from 'src/helpers/error-execption/error.service';
 import { Prisma } from '@prisma/client';

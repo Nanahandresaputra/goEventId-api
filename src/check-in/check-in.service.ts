@@ -7,7 +7,8 @@ import {
 import { CreateCheckInDto } from './dto/create-check-in.dto';
 import { UpdateCheckInDto } from './dto/update-check-in.dto';
 import { ErrorExecptionService } from 'src/helpers/error-execption/error.service';
-import { PrismaService } from 'src/db/prisma.service';
+// import { PrismaService } from 'src/db/prisma.service'; // local
+import { PrismaService } from '../db/prisma.service'; // prod -> vercel
 import { status_order } from '@prisma/client';
 import { SuccessResponseService } from 'src/helpers/success-response/success.service';
 
