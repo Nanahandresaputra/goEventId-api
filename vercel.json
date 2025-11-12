@@ -10,7 +10,7 @@
     {
       "src": "/(.*)",
       "dest": "src/vercel.ts",
-      "methods": ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
+      "methods": ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE", "OPTIONS"]
     }
   ]
 }
